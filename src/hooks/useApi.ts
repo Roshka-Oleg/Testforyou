@@ -2,33 +2,19 @@ import { useState, useCallback } from 'react';
 
 /**
  * Fallback категории на случай недоступности API
- * Используются, если запрос к dummyjson.com не проходит
+ * 10 популярных сфер деятельности на русском языке
  */
 const FALLBACK_CATEGORIES = [
-  'Beauty',
-  'Fragrances',
-  'Furniture',
-  'Groceries',
-  'Home Decoration',
-  'Kitchen Accessories',
-  'Laptops',
-  'Mens Shirts',
-  'Mens Shoes',
-  'Mens Watches',
-  'Mobile Accessories',
-  'Motorcycle',
-  'Skin Care',
-  'Smartphones',
-  'Sports Accessories',
-  'Sunglasses',
-  'Tablets',
-  'Tops',
-  'Vehicle',
-  'Womens Bags',
-  'Womens Dresses',
-  'Womens Jewellery',
-  'Womens Shoes',
-  'Womens Watches'
+  'IT и разработка',
+  'Финансы и банки',
+  'Образование',
+  'Медицина',
+  'Торговля',
+  'Производство',
+  'Строительство',
+  'Транспорт и логистика',
+  'Госслужба',
+  'Другое'
 ];
 
 /**
