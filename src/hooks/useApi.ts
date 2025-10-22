@@ -1,44 +1,32 @@
 import { useState } from 'react';
 
-// Список реальных мест работы/сфер деятельности для России
-const WORKPLACE_OPTIONS = [
-  'IT и разработка программного обеспечения',
-  'Банковская сфера и финансы',
-  'Образование и наука',
-  'Медицина и здравоохранение',
-  'Торговля (розничная/оптовая)',
-  'Строительство',
-  'Производство',
-  'Транспорт и логистика',
-  'Государственная служба',
-  'Телекоммуникации и связь',
-  'Маркетинг и реклама',
-  'Юридические услуги',
-  'Недвижимость',
-  'Туризм и гостиничный бизнес',
-  'Ресторанный бизнес',
-  'Консалтинг',
-  'Страхование',
-  'Энергетика',
-  'Сельское хозяйство',
-  'Другое'
-];
-
+/**
+ * Кастомный хук для работы с API
+ * Используется для загрузки категорий мест работы и отправки заявки
+ */
 export const useApi = () => {
   const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  /**
+   * Загрузка категорий из API (согласно ТЗ)
+   * API: https://dummyjson.com/products/categories
+   * Результат кэшируется в состоянии для переиспользования
+   */
   const fetchCategories = async () => {
     try {
       setLoading(true);
       setError(null);
       
-      // Используем локальный список вместо внешнего API
-      // Имитируем небольшую задержку для UX
-      await new Promise(resolve => setTimeout(resolve, 300));
+      const response = await fetch('https://dummyjson.com/products/categories');
       
-      setCategories(WORKPLACE_OPTIONS);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      setCategories(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error occurred');
     } finally {

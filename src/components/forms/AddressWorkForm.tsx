@@ -100,11 +100,12 @@ const AddressWorkForm = ({
               onChange={(e) => handleChange('workplace', e.target.value)}
               disabled={loading}
             >
-              <option value="">Выберите сферу деятельности</option>
-              {/* Отображаем загруженные категории */}
+              <option value="">Выберите место работы</option>
+              {/* Отображаем загруженные категории из API */}
               {categories.map((category) => (
                 <option key={category} value={category}>
-                  {category}
+                  {/* Форматируем: первая буква заглавная */}
+                  {category.charAt(0).toUpperCase() + category.slice(1)}
                 </option>
               ))}
             </select>
