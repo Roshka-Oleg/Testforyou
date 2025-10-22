@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 /**
  * Кастомный хук для работы с API
@@ -14,7 +14,7 @@ export const useApi = () => {
    * API: https://dummyjson.com/products/categories
    * Результат кэшируется в состоянии для переиспользования
    */
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -36,7 +36,7 @@ export const useApi = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []); // Пустой массив зависимостей - функция создается один раз
 
   const submitApplication = async (title: string) => {
     try {

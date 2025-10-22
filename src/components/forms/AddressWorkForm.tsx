@@ -47,8 +47,9 @@ const AddressWorkForm = ({
   const { categories, loading, error, fetchCategories } = useApi();
 
   useEffect(() => {
+    // Загружаем категории при монтировании компонента
     fetchCategories();
-  }, []);
+  }, [fetchCategories]); // fetchCategories стабильна благодаря useCallback
 
   const handleChange = (field: string, value: string) => {
     const updatedData = { ...formData, [field]: value };
