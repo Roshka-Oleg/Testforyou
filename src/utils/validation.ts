@@ -1,10 +1,12 @@
 import { FormData } from '../types/types';
 export const validatePersonalData = (data: FormData['personal']) => {
   const errors: { [key: string]: string } = {};
+  
+  // Валидация российского номера телефона
   if (!data.phone.trim()) {
     errors.phone = 'Телефон обязателен для заполнения';
-  } else if (!/^0\d{3} \d{3} \d{3}$/.test(data.phone)) {
-    errors.phone = 'Телефон должен быть в формате 0XXX XXX XXX';
+  } else if (!/^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/.test(data.phone)) {
+    errors.phone = 'Телефон должен быть в формате +7 (XXX) XXX-XX-XX';
   }
 
   if (!data.firstName.trim()) {
@@ -50,17 +52,37 @@ export const validateLoanData = (data: FormData['loan']) => {
   return errors;
 };
 
+// Форматирование российского номера телефона: +7 (XXX) XXX-XX-XX
 export const formatPhone = (value: string): string => {
+  // Убираем все нечисловые символы
   const numbers = value.replace(/\D/g, '');
-  let formatted = '';
-  if (numbers.length > 0) {
-    formatted = numbers.substring(0, 4); 
+  
+  // Если номер начинается с 8, заменяем на 7
+  let cleanNumbers = numbers;
+  if (numbers.startsWith('8')) {
+    cleanNumbers = '7' + numbers.substring(1);
+  } else if (!numbers.startsWith('7') && numbers.length > 0) {
+    cleanNumbers = '7' + numbers;
   }
-  if (numbers.length > 4) {
-    formatted += ' ' + numbers.substring(4, 7); 
+  
+  // Форматируем: +7 (XXX) XXX-XX-XX
+  let formatted = '+7';
+  
+  if (cleanNumbers.length > 1) {
+    formatted += ' (' + cleanNumbers.substring(1, 4);
   }
-  if (numbers.length > 7) {
-    formatted += ' ' + numbers.substring(7, 10); 
+  if (cleanNumbers.length >= 4) {
+    formatted += ')';
   }
+  if (cleanNumbers.length > 4) {
+    formatted += ' ' + cleanNumbers.substring(4, 7);
+  }
+  if (cleanNumbers.length > 7) {
+    formatted += '-' + cleanNumbers.substring(7, 9);
+  }
+  if (cleanNumbers.length > 9) {
+    formatted += '-' + cleanNumbers.substring(9, 11);
+  }
+  
   return formatted;
 };

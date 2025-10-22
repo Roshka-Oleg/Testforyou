@@ -55,8 +55,8 @@ const PersonalDataForm = ({
               id="phone"
               value={formData.phone}
               onChange={(e) => handleChange('phone', e.target.value)}
-              placeholder="0XXX XXX XXX"
-              maxLength={12}
+              placeholder="+7 (XXX) XXX-XX-XX"
+              maxLength={18}
             />
             {errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
           </div>

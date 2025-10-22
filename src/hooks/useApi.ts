@@ -1,5 +1,29 @@
 import { useState } from 'react';
 
+// Список реальных мест работы/сфер деятельности для России
+const WORKPLACE_OPTIONS = [
+  'IT и разработка программного обеспечения',
+  'Банковская сфера и финансы',
+  'Образование и наука',
+  'Медицина и здравоохранение',
+  'Торговля (розничная/оптовая)',
+  'Строительство',
+  'Производство',
+  'Транспорт и логистика',
+  'Государственная служба',
+  'Телекоммуникации и связь',
+  'Маркетинг и реклама',
+  'Юридические услуги',
+  'Недвижимость',
+  'Туризм и гостиничный бизнес',
+  'Ресторанный бизнес',
+  'Консалтинг',
+  'Страхование',
+  'Энергетика',
+  'Сельское хозяйство',
+  'Другое'
+];
+
 export const useApi = () => {
   const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -10,14 +34,11 @@ export const useApi = () => {
       setLoading(true);
       setError(null);
       
-      const response = await fetch('https://dummyjson.com/products/categories');
+      // Используем локальный список вместо внешнего API
+      // Имитируем небольшую задержку для UX
+      await new Promise(resolve => setTimeout(resolve, 300));
       
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      setCategories(data);
+      setCategories(WORKPLACE_OPTIONS);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error occurred');
     } finally {

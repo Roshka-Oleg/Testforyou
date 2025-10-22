@@ -3,6 +3,30 @@ import { FormData } from '../../types/types';
 import { validateAddressWorkData } from '../../utils/validation';
 import { useApi } from '../../hooks/useApi';
 
+// Популярные города России для подсказок
+const RUSSIAN_CITIES = [
+  'Москва',
+  'Санкт-Петербург',
+  'Новосибирск',
+  'Екатеринбург',
+  'Казань',
+  'Нижний Новгород',
+  'Челябинск',
+  'Самара',
+  'Омск',
+  'Ростов-на-Дону',
+  'Уфа',
+  'Красноярск',
+  'Воронеж',
+  'Пермь',
+  'Волгоград',
+  'Краснодар',
+  'Саратов',
+  'Тюмень',
+  'Тольятти',
+  'Ижевск'
+];
+
 interface AddressWorkFormProps {
   data: FormData['addressWork'];
   onSubmit: (data: FormData['addressWork']) => void;
@@ -19,6 +43,7 @@ const AddressWorkForm = ({
 
   const [formData, setFormData] = useState(data);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [addressSuggestions, setAddressSuggestions] = useState<string[]>([]);
   const { categories, loading, error, fetchCategories } = useApi();
 
   useEffect(() => {
@@ -28,6 +53,19 @@ const AddressWorkForm = ({
   const handleChange = (field: string, value: string) => {
     const updatedData = { ...formData, [field]: value };
     setFormData(updatedData);
+    
+    // Генерируем подсказки для адреса на основе ввода
+    if (field === 'address' && value.trim().length > 0) {
+      const input = value.toLowerCase();
+      const suggestions = RUSSIAN_CITIES
+        .filter(city => city.toLowerCase().includes(input))
+        .map(city => `г. ${city}, ул. `)
+        .slice(0, 5); // Показываем максимум 5 подсказок
+      setAddressSuggestions(suggestions);
+    } else if (field === 'address') {
+      setAddressSuggestions([]);
+    }
+    
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
     }
@@ -62,12 +100,11 @@ const AddressWorkForm = ({
               onChange={(e) => handleChange('workplace', e.target.value)}
               disabled={loading}
             >
-              <option value="">Выберите место работы</option>
+              <option value="">Выберите сферу деятельности</option>
               {/* Отображаем загруженные категории */}
               {categories.map((category) => (
                 <option key={category} value={category}>
-                  {/* Форматируем название категории (первая буква заглавная) */}
-                  {category.charAt(0).toUpperCase() + category.slice(1)}
+                  {category}
                 </option>
               ))}
             </select>
@@ -79,7 +116,7 @@ const AddressWorkForm = ({
             {errors.workplace && <div className="invalid-feedback">{errors.workplace}</div>}
           </div>
 
-          {/* Поле адреса */}
+          {/* Поле адреса с автоподстановкой */}
           <div className="mb-4">
             <label htmlFor="address" className="form-label">Адрес проживания *</label>
             <input
@@ -88,7 +125,21 @@ const AddressWorkForm = ({
               id="address"
               value={formData.address}
               onChange={(e) => handleChange('address', e.target.value)}
+              placeholder="Начните вводить город..."
+              list="address-suggestions"
+              autoComplete="off"
             />
+            {/* Подсказки для адреса */}
+            {addressSuggestions.length > 0 && (
+              <datalist id="address-suggestions">
+                {addressSuggestions.map((suggestion, index) => (
+                  <option key={index} value={suggestion} />
+                ))}
+              </datalist>
+            )}
+            <small className="form-text text-muted">
+              Например: г. Москва, ул. Ленина, д. 1, кв. 10
+            </small>
             {errors.address && <div className="invalid-feedback">{errors.address}</div>}
           </div>
 
