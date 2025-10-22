@@ -26,7 +26,11 @@ export const useApi = () => {
       }
       
       const data = await response.json();
-      setCategories(data);
+      
+      // API возвращает массив объектов с полями: slug, name, url
+      // Извлекаем поле name для отображения
+      const categoryNames = data.map((item: { slug: string; name: string; url: string }) => item.name);
+      setCategories(categoryNames);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error occurred');
     } finally {

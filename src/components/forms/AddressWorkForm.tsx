@@ -104,8 +104,7 @@ const AddressWorkForm = ({
               {/* Отображаем загруженные категории из API */}
               {categories.map((category) => (
                 <option key={category} value={category}>
-                  {/* Форматируем: первая буква заглавная */}
-                  {category.charAt(0).toUpperCase() + category.slice(1)}
+                  {category}
                 </option>
               ))}
             </select>
