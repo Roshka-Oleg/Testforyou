@@ -2,7 +2,6 @@ import { FormData } from '../types/types';
 export const validatePersonalData = (data: FormData['personal']) => {
   const errors: { [key: string]: string } = {};
   
-  // Валидация российского номера телефона
   if (!data.phone.trim()) {
     errors.phone = 'Телефон обязателен для заполнения';
   } else if (!/^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/.test(data.phone)) {
@@ -52,12 +51,9 @@ export const validateLoanData = (data: FormData['loan']) => {
   return errors;
 };
 
-// Форматирование российского номера телефона: +7 (XXX) XXX-XX-XX
 export const formatPhone = (value: string): string => {
-  // Убираем все нечисловые символы
   const numbers = value.replace(/\D/g, '');
   
-  // Если номер начинается с 8, заменяем на 7
   let cleanNumbers = numbers;
   if (numbers.startsWith('8')) {
     cleanNumbers = '7' + numbers.substring(1);
@@ -65,7 +61,6 @@ export const formatPhone = (value: string): string => {
     cleanNumbers = '7' + numbers;
   }
   
-  // Форматируем: +7 (XXX) XXX-XX-XX
   let formatted = '+7';
   
   if (cleanNumbers.length > 1) {
