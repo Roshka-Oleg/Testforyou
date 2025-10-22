@@ -5,7 +5,7 @@ import { validateLoanData } from '../../utils/validation';
 // Пропсы для компонента формы
 interface LoanParamsFormProps {
   data: FormData['loan'];
-  personalData: FormData['personal']; // Нужны для отправки заявки
+  personalData: FormData['personal']; 
   onSubmit: (data: FormData['loan']) => void;
   onBack: () => void;
   onApplicationSubmit: () => void;
@@ -19,41 +19,33 @@ const LoanParamsForm = ({
   onApplicationSubmit,
   loading = false,
 }: LoanParamsFormProps) => {
-  // Локальное состояние формы
   const [formData, setFormData] = useState(data);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  // Обработчик изменения суммы займа
   const handleAmountChange = (value: number) => {
     const updatedData = { ...formData, amount: value };
     setFormData(updatedData);
     
-    // Очищаем ошибку
     if (errors.amount) {
       setErrors(prev => ({ ...prev, amount: '' }));
     }
   };
 
-  // Обработчик изменения срока займа
   const handleTermChange = (value: number) => {
     const updatedData = { ...formData, term: value };
     setFormData(updatedData);
     
-    // Очищаем ошибку
     if (errors.term) {
       setErrors(prev => ({ ...prev, term: '' }));
     }
   };
 
-  // Обработчик отправки заявки
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Валидируем данные
     const validationErrors = validateLoanData(formData);
     
     if (Object.keys(validationErrors).length === 0) {
-      // Сохраняем данные и отправляем заявку
       onSubmit(formData);
       onApplicationSubmit();
     } else {
@@ -67,7 +59,6 @@ const LoanParamsForm = ({
         <h2 className="card-title mb-4">Параметры займа</h2>
         
         <form onSubmit={handleSubmit}>
-          {/* Ползунок суммы займа */}
           <div className="mb-4">
             <label htmlFor="amount" className="form-label">
               Сумма займа: ${formData.amount}
@@ -82,16 +73,13 @@ const LoanParamsForm = ({
               value={formData.amount}
               onChange={(e) => handleAmountChange(Number(e.target.value))}
             />
-            {/* Подписи минимального и максимального значения */}
             <div className="d-flex justify-content-between">
               <small>$200</small>
               <small>$1000</small>
             </div>
-            {/* Ошибка валидации */}
             {errors.amount && <div className="invalid-feedback d-block">{errors.amount}</div>}
           </div>
 
-          {/* Ползунок срока займа */}
           <div className="mb-4">
             <label htmlFor="term" className="form-label">
               Срок займа: {formData.term} дней
@@ -113,7 +101,6 @@ const LoanParamsForm = ({
             {errors.term && <div className="invalid-feedback d-block">{errors.term}</div>}
           </div>
 
-          {/* Кнопки навигации */}
           <div className="d-grid gap-2 d-md-flex justify-content-md-between">
             <button 
               type="button" 
@@ -127,7 +114,6 @@ const LoanParamsForm = ({
               className="btn btn-success"
               disabled={loading}
             >
-              {/* Меняем текст кнопки при загрузке */}
               {loading ? 'Отправка...' : 'Подать заявку'}
             </button>
           </div>
