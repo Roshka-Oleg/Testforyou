@@ -1,9 +1,6 @@
 import { useState, useCallback } from 'react';
 
-/**
- * Fallback категории на случай недоступности API
- * 10 популярных сфер деятельности на русском языке
- */
+
 const FALLBACK_CATEGORIES = [
   'IT и разработка',
   'Финансы и банки',
@@ -17,29 +14,21 @@ const FALLBACK_CATEGORIES = [
   'Другое'
 ];
 
-/**
- * Кастомный хук для работы с API
- * Используется для загрузки категорий мест работы и отправки заявки
- */
+
 export const useApi = () => {
   const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  /**
-   * Загрузка категорий из API (согласно ТЗ)
-   * API: https://dummyjson.com/products/categories
-   * Результат кэшируется в состоянии для переиспользования
-   * При недоступности API используются fallback данные
-   */
+
   const fetchCategories = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
       
-      // Добавляем timeout для запроса
+
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 секунд timeout
+      const timeoutId = setTimeout(() => controller.abort(), 5000); 
       
       const response = await fetch('https://dummyjson.com/products/categories', {
         signal: controller.signal
