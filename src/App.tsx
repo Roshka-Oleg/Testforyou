@@ -8,19 +8,14 @@ import SuccessModal from './components/common/SuccessModal';
 import { useFormData } from './hooks/useFormData';
 import { useApi } from './hooks/useApi';
 
-/**
- * Компонент с роутингом для управления формами
- * Используем React Router для навигации между шагами формы
- */
+
 function AppContent() {
   const navigate = useNavigate();
   const { formData, updatePersonalData, updateAddressWorkData, updateLoanData } = useFormData();
   const { submitApplication, loading } = useApi();
   const [showModal, setShowModal] = useState(false);
 
-  /**
-   * Обработчики для переходов между формами
-   */
+
   const handlePersonalDataSubmit = (data: typeof formData.personal) => {
     updatePersonalData(data);
   };
@@ -33,35 +28,24 @@ function AppContent() {
     updateLoanData(data);
   };
 
-  /**
-   * Обработчик финальной отправки заявки
-   * Отправляем данные на API и показываем модальное окно
-   */
+ 
   const handleApplicationSubmit = async () => {
     try {
-      // Формируем title согласно ТЗ: firstName + ' ' + lastName
       const title = `${formData.personal.firstName} ${formData.personal.lastName}`;
       
-      // Отправляем заявку на API
       await submitApplication(title);
       
-      // Показываем модальное окно с результатом
       setShowModal(true);
     } catch (error) {
-      // В случае ошибки всё равно показываем модальное окно
-      // так как это тестовый API
+      
       console.error('Error submitting application:', error);
       setShowModal(true);
     }
   };
 
-  /**
-   * Обработчик закрытия модального окна
-   * Возвращаем пользователя на первую форму
-   */
+ 
   const handleModalClose = () => {
     setShowModal(false);
-    // Опционально: можно сбросить данные формы и вернуться на первый шаг
     navigate('/');
   };
 
@@ -71,7 +55,6 @@ function AppContent() {
         <div className="row justify-content-center">
           <div className="col-md-6">
             <Routes>
-              {/* Форма 1: Личные данные */}
               <Route 
                 path="/" 
                 element={
@@ -83,7 +66,6 @@ function AppContent() {
                 } 
               />
               
-              {/* Форма 2: Адрес и место работы */}
               <Route 
                 path="/address-work" 
                 element={
@@ -96,7 +78,6 @@ function AppContent() {
                 } 
               />
               
-              {/* Форма 3: Параметры займа */}
               <Route 
                 path="/loan-params" 
                 element={
@@ -111,14 +92,12 @@ function AppContent() {
                 } 
               />
               
-              {/* Редирект на главную для несуществующих маршрутов */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </div>
         </div>
       </div>
 
-      {/* Модальное окно успешной подачи заявки */}
       <SuccessModal
         isOpen={showModal}
         onClose={handleModalClose}
@@ -128,10 +107,7 @@ function AppContent() {
   );
 }
 
-/**
- * Корневой компонент приложения
- * Оборачиваем всё в Router для использования React Router
- */
+
 function App() {
   return (
     <Router>
