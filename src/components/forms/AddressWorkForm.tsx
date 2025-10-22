@@ -111,14 +111,25 @@ const AddressWorkForm = ({
             </select>
             {/* Показываем состояние загрузки */}
             {loading && <div className="form-text">Загрузка категорий...</div>}
-            {/* Показываем ошибки загрузки */}
-            {error && <div className="form-text text-danger">Ошибка загрузки: {error}</div>}
-            {/* Отладочная информация */}
-            {!loading && !error && categories.length > 0 && (
-              <div className="form-text text-success">
-                ✅ Загружено {categories.length} категорий
+            {/* Показываем информацию о fallback */}
+            {error && categories.length > 0 && (
+              <div className="form-text text-info">
+                ℹ️ {error} Загружено {categories.length} категорий.
               </div>
             )}
+            {/* Ошибка без fallback */}
+            {error && categories.length === 0 && (
+              <div className="form-text text-danger">
+                ❌ Ошибка загрузки: {error}
+              </div>
+            )}
+            {/* Успешная загрузка из API */}
+            {!loading && !error && categories.length > 0 && (
+              <div className="form-text text-success">
+                ✅ Загружено {categories.length} категорий из API
+              </div>
+            )}
+            {/* Категории не загружены */}
             {!loading && !error && categories.length === 0 && (
               <div className="form-text text-warning">
                 ⚠️ Категории не загружены
