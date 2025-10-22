@@ -3,7 +3,6 @@ import { FormData } from '../../types/types';
 import { validateAddressWorkData } from '../../utils/validation';
 import { useApi } from '../../hooks/useApi';
 
-// Популярные города России для подсказок
 const RUSSIAN_CITIES = [
   'Москва',
   'Санкт-Петербург',
@@ -47,21 +46,18 @@ const AddressWorkForm = ({
   const { categories, loading, error, fetchCategories } = useApi();
 
   useEffect(() => {
-    // Загружаем категории при монтировании компонента
     fetchCategories();
-  }, [fetchCategories]); // fetchCategories стабильна благодаря useCallback
-
+  }, [fetchCategories]); 
   const handleChange = (field: string, value: string) => {
     const updatedData = { ...formData, [field]: value };
     setFormData(updatedData);
     
-    // Генерируем подсказки для адреса на основе ввода
     if (field === 'address' && value.trim().length > 0) {
       const input = value.toLowerCase();
       const suggestions = RUSSIAN_CITIES
         .filter(city => city.toLowerCase().includes(input))
         .map(city => `г. ${city}, ул. `)
-        .slice(0, 5); // Показываем максимум 5 подсказок
+        .slice(0, 5); 
       setAddressSuggestions(suggestions);
     } else if (field === 'address') {
       setAddressSuggestions([]);
@@ -91,7 +87,6 @@ const AddressWorkForm = ({
         <h2 className="card-title mb-4">Адрес и место работы</h2>
 
         <form onSubmit={handleSubmit}>
-          {/* Выбор места работы */}
           <div className="mb-3">
             <label htmlFor="workplace" className="form-label">Место работы *</label>
             <select
@@ -102,44 +97,36 @@ const AddressWorkForm = ({
               disabled={loading}
             >
               <option value="">Выберите место работы</option>
-              {/* Отображаем загруженные категории из API */}
               {categories.map((category) => (
                 <option key={category} value={category}>
                   {category}
                 </option>
               ))}
             </select>
-            {/* Показываем состояние загрузки */}
             {loading && <div className="form-text">Загрузка категорий...</div>}
-            {/* Показываем информацию о fallback */}
             {error && categories.length > 0 && (
               <div className="form-text text-info">
                 ℹ️ {error} Загружено {categories.length} категорий.
               </div>
             )}
-            {/* Ошибка без fallback */}
             {error && categories.length === 0 && (
               <div className="form-text text-danger">
                 ❌ Ошибка загрузки: {error}
               </div>
             )}
-            {/* Успешная загрузка из API */}
             {!loading && !error && categories.length > 0 && (
               <div className="form-text text-success">
                 ✅ Загружено {categories.length} категорий из API
               </div>
             )}
-            {/* Категории не загружены */}
             {!loading && !error && categories.length === 0 && (
               <div className="form-text text-warning">
                 ⚠️ Категории не загружены
               </div>
             )}
-            {/* Показываем ошибки валидации */}
             {errors.workplace && <div className="invalid-feedback">{errors.workplace}</div>}
           </div>
 
-          {/* Поле адреса с автоподстановкой */}
           <div className="mb-4">
             <label htmlFor="address" className="form-label">Адрес проживания *</label>
             <input
@@ -152,7 +139,6 @@ const AddressWorkForm = ({
               list="address-suggestions"
               autoComplete="off"
             />
-            {/* Подсказки для адреса */}
             {addressSuggestions.length > 0 && (
               <datalist id="address-suggestions">
                 {addressSuggestions.map((suggestion, index) => (
@@ -166,7 +152,6 @@ const AddressWorkForm = ({
             {errors.address && <div className="invalid-feedback">{errors.address}</div>}
           </div>
 
-          {/* Кнопки навигации */}
           <div className="d-grid gap-2 d-md-flex justify-content-md-between">
             <button 
               type="button" 
@@ -178,7 +163,7 @@ const AddressWorkForm = ({
             <button 
               type="submit" 
               className="btn btn-primary"
-              disabled={loading} // Блокируем при загрузке
+              disabled={loading} 
             >
               Далее
             </button>
