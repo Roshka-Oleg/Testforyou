@@ -113,6 +113,17 @@ const AddressWorkForm = ({
             {loading && <div className="form-text">Загрузка категорий...</div>}
             {/* Показываем ошибки загрузки */}
             {error && <div className="form-text text-danger">Ошибка загрузки: {error}</div>}
+            {/* Отладочная информация */}
+            {!loading && !error && categories.length > 0 && (
+              <div className="form-text text-success">
+                ✅ Загружено {categories.length} категорий
+              </div>
+            )}
+            {!loading && !error && categories.length === 0 && (
+              <div className="form-text text-warning">
+                ⚠️ Категории не загружены
+              </div>
+            )}
             {/* Показываем ошибки валидации */}
             {errors.workplace && <div className="invalid-feedback">{errors.workplace}</div>}
           </div>

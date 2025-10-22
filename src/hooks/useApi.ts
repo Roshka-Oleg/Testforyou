@@ -30,6 +30,8 @@ export const useApi = () => {
       // API возвращает массив объектов с полями: slug, name, url
       // Извлекаем поле name для отображения
       const categoryNames = data.map((item: { slug: string; name: string; url: string }) => item.name);
+      console.log('✅ Категории загружены:', categoryNames.length, 'шт.');
+      console.log('Первые 3 категории:', categoryNames.slice(0, 3));
       setCategories(categoryNames);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error occurred');
